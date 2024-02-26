@@ -1,40 +1,10 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.4'
-    }
-}
-apply plugin: 'com.android.library'
-
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'time-duration-picker'
-    libraryName = 'time-duration-picker'
-
-    publishedGroupId = 'mobi.upod'
-    artifact = 'time-duration-picker'
-    libraryVersion = '1.2.0'
-
-    libraryDescription = 'An Android library, that provides a component which makes it quick and easy for a user to enter a time duration in hours, minutes and seconds, similar to Android Lollipop\'s stock timer app.'
-
-    siteUrl = 'https://github.com/svenwiegand/time-duration-picker'
-    gitUrl = 'https://github.com/svenwiegand/time-duration-picker.git'
-
-    developerId = 'svenwiegand'
-    developerName = 'Sven Wiegand'
-    developerEmail = 'source@sven-wiegand.de'
-
-    licenseName = 'MIT'
-    licenseUrl = 'https://github.com/svenwiegand/time-duration-picker/blob/master/LICENSE.md'
-    allLicenses = ['MIT']
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
 }
 
-repositories {
-    mavenCentral()
-}
+group = 'mobi.upod'
+version = '1.4.0'
 
 android {
     namespace 'mobi.upod.timedurationpicker'
@@ -50,11 +20,29 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'mobi.upod'
+                artifactId = 'time-duration-picker'
+            }
+        }
+    }
 }
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.preference:preference:1.2.1'
-    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
 }
